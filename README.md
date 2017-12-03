@@ -1,7 +1,7 @@
 # Transfer learning with Tensorflow
 Training the final layer of the google inception model with given input images and predict which class an image belongs to.
 
-## Prequisits
+## Prerequisite
 
 To be able to train and use the model you need to install the following:
 - python 3 installed
@@ -22,6 +22,6 @@ python retrain.py --image_dir <path to current dir>/data/training-data/images/ -
 python predict.py --test-image ./data/test/vase.png --labels ./data/training-data/models/output_labels.txt --graph ./data/training-data/models/output_graph.pb
 ```
 
-###Help
+### Help
 
 Depending on the OS the path sometimes is not correctly found. The tensorflow lib then writes the models in your os tmp folder.
