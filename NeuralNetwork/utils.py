@@ -1,10 +1,12 @@
-from os import walk
+import cv2
+import math
 import random
 import collections
-import cv2
-from skimage import feature
+
 import numpy as np
-import math
+
+from os import walk
+from skimage import feature
 from keras.models import Sequential
 from keras.layers import Dense
 
@@ -18,8 +20,7 @@ def getHogFeatures(imagePath, label):
   # get hog feature for each image
   hogFeatures = []
   for f in files[:10]:
-    H = getHog(imagePath + f)
-    print(H.shape)
+    (H, _) = getHog(imagePath + f)
     D = np.append(H, label)
     hogFeatures.append(D)
 
@@ -34,8 +35,8 @@ def getHog(imagePath):
 
   # resize image (devided by 4)
   res = cv2.resize(img,(int(width/4), int(height/4)), interpolation = cv2.INTER_CUBIC)
-  (H, _) = feature.hog(img, orientations=9, pixels_per_cell=(16, 16), cells_per_block=(2, 2), transform_sqrt=True, visualise=True)
-  return H
+  (H, image) = feature.hog(img, orientations=9, pixels_per_cell=(16, 16), cells_per_block=(2, 2), transform_sqrt=True, visualise=True)
+  return H, image
 
 def getTestAndTrainData(dataArray, seed):
   if (seed):
@@ -59,7 +60,7 @@ def trainNetwork(train_data, train_labels, test_data, test_labels, numberOfClass
   model = Sequential()
   model.add(Dense(32, activation='relu',input_dim=num_hog_features))
   model.add(Dense(32, activation='relu'))
-  model.add(Dense(2, activation='softmax'))
+  model.add(Dense(1, activation='sigmoid'))
 
   #compile network
   model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
