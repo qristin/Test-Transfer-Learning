@@ -10,7 +10,7 @@ from skimage import feature
 from keras.models import Sequential
 from keras.layers import Dense
 
-def getHogFeatures(imagePath, label):
+def getHogFeatures(imagePath, label, batchSize):
   # get pathes for all images in directory (imagePath)
   files = []
   for (dirpath, dirnames, filenames) in walk(imagePath):
@@ -19,7 +19,7 @@ def getHogFeatures(imagePath, label):
 
   # get hog feature for each image
   hogFeatures = []
-  for f in files[:10]:
+  for f in files[:batchSize]:
     (H, _) = getHog(imagePath + f)
     D = np.append(H, label)
     hogFeatures.append(D)
@@ -55,6 +55,8 @@ def getTestAndTrainData(dataArray, seed):
 def trainNetwork(train_data, train_labels, test_data, test_labels, numberOfClasses):
   num_hog_features = len(train_data[0])
   batch_size = len(train_data)
+  np.transpose(train_data)
+  np.transpose(test_data)
 
   # simple neural network with 1 hidden layer with 32 nodes
   model = Sequential()
