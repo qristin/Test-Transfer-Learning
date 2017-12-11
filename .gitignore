@@ -1,5 +1,6 @@
 # data files
 data/
+Generate-Example/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

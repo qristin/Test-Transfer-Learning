@@ -71,5 +71,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# results = predict('./inception-2015-12-05/imagenet_synset_to_human_label_map.txt', './inception-2015-12-05/classify_image_graph_def.pb', '/media/kristin/DATA/Projects/Borges/Test/Borges_assessment_data/datadir/vase/png/0f2a22f0-c67d-42b9-9e87-43e09e48fa1f.png')
