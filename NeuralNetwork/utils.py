@@ -7,8 +7,9 @@ import numpy as np
 
 from os import walk
 from skimage import feature
-from keras.models import Sequential
+from skimage import exposure
 from keras.layers import Dense
+from keras.models import Sequential
 
 def getHogFeatures(imagePath, label, batchSize):
   # get pathes for all images in directory (imagePath)
@@ -33,10 +34,22 @@ def getHog(imagePath):
   # get size of image
   height, width = img.shape[:2]
 
-  # resize image (devided by 4)
-  res = cv2.resize(img,(int(width/4), int(height/4)), interpolation = cv2.INTER_CUBIC)
-  (H, image) = feature.hog(img, orientations=9, pixels_per_cell=(16, 16), cells_per_block=(2, 2), transform_sqrt=True, visualise=True)
-  return H, image
+  (H, hogImage) = feature.hog(img, orientations=9, pixels_per_cell=(16, 16), cells_per_block=(2, 2), transform_sqrt=True, visualise=True)
+  hogImage = exposure.rescale_intensity(hogImage, out_range=(0, 255))
+  hogImage = hogImage.astype("uint8")
+
+  return H, hogImage
+
+def getHogSize256(imagePath):
+  # load image
+  img = cv2.imread(imagePath,0)
+  # resize image (256, 256)
+  res = cv2.resize(img,(256, 256), interpolation = cv2.INTER_CUBIC)
+  (H, hogImage) = feature.hog(res, orientations=9, pixels_per_cell=(16, 16), cells_per_block=(2, 2), transform_sqrt=True, visualise=True)
+  hogImage = exposure.rescale_intensity(hogImage, out_range=(0, 255))
+  hogImage = hogImage.astype("uint8")
+
+  return H, hogImage
 
 def getTestAndTrainData(dataArray, seed):
   if (seed):
